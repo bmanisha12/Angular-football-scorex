@@ -1,0 +1,14 @@
+<html>
+<body>
+
+<div class="menu">
+  <ul>
+    <li *ngFor="let item of countryList; index as i">
+      <a id="item + 'Select'" (click)="selectCountry($event, item)"> {{item.countryName}} </a>
+    </li>
+  </ul>
+</div>
+<router-outlet></router-outlet>
+
+</body>
+</html>
