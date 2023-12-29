@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FootballdataService } from '../footballdata.service';
 
@@ -7,13 +7,33 @@ import { FootballdataService } from '../footballdata.service';
   templateUrl: './game-results.component.html',
   styleUrls: ['./game-results.component.css']
 })
-export class GameResultsComponent {
-
+export class GameResultsComponent implements OnInit{
+fixtureData: any;
+  fixturesDataSubscription: any;
   constructor(
     private router: Router,
     private activatedRoute: ActivatedRoute,
     private footballApiService: FootballdataService,
   ) {}
+
+  ngOnInit() {
+    this.fixturesDataSubscription = this.footballApiService.getFixtures(this.footballApiService.countryLeagueId).subscribe(
+      {
+        next: (data: any) => {
+         this.fixtureData = data;
+        },
+        error: (err) => {
+          console.error('Error fetching football data:', err);
+        }
+      }
+    );
+  }
+
+  ngOnDestroy() {
+    if (this.fixturesDataSubscription) {
+      this.fixturesDataSubscription.unsubscribe();
+    }
+  }
 
   goBack() {
     const teamName = this.activatedRoute.snapshot.params['teamName'];

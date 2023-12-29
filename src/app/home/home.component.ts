@@ -23,11 +23,11 @@ export class HomeComponent {
   selectCountry(event: Event, country: any) {
     event.preventDefault();
     this.footballApiService.countryName = country.countryName;
+    this.footballApiService.countryLeagueId = country.leagueId;
     this.router.navigate(['/countryStandings', country.countryName]);
     this.footballDataSubscription = this.footballApiService.getFootballCountryData(country.leagueId).subscribe(
       {
         next: (data) => {
-
           const standingsData = data.response[0].league.standings[0];
           this.footballApiService.standingsData$.next(standingsData);
         },

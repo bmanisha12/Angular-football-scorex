@@ -1,32 +1,24 @@
-<!-- <ng-container *ngIf="gameResultsData">
-    <table class="data-table">
-      <thead>
-        <tr>
-          <th>Logo</th>
-          <th>Team Name</th>
-          <th>Score</th>
-          <th>-</th>
-          <th>Score</th>
-          <th>Team Name</th>
-          <th>Logo</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let team of standingsData">
-          <td><img [src]="team.team.logo" alt="{{ team.team.name }} Logo" width="40" height="40"></td>
-          <td>{{ team.team.name }}</td>
-          <td>{{ team.all.played }}</td>
-          <td>{{ team.all.win }}</td>
-          <td>{{ team.all.lose }}</td>
-          <td>{{ team.all.draw }}</td>
-          <td>{{ team.goalsDiff }}</td>
-          <td>{{ team.points }}</td>
-        </tr>
-      </tbody>
-    </table>
-    </ng-container>
+<table class="data-table" *ngIf="fixtureData?.response">
+  <thead>
+    <tr>
+      <th>Team 1 Logo</th>
+      <th>Team 1 Name</th>
+      <th>Score</th>
+      <th>Team 2 Name</th>
+      <th>Team 2 Logo</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let fixture of fixtureData.response">
+      <td><img [src]="fixture.teams.home.logo" alt="{{ fixture.teams.home.name }} Logo"></td>
+      <td>{{ fixture.teams.home.name }}</td>
+      <td>{{ fixture.goals.home }} - {{ fixture.goals.away }}</td>
+      <td>{{ fixture.teams.away.name }}</td>
+      <td><img [src]="fixture.teams.away.logo" alt="{{ fixture.teams.away.name }} Logo"></td>
 
-     -->
-     game results Here
+      <!-- <pre>  {{fixture | json}} </pre> -->
+    </tr>
+  </tbody>
+</table>
 
-     <button class="back-button" (click)="goBack()">Back</button>
+<button class="back-button" (click)="goBack()">Back</button>
