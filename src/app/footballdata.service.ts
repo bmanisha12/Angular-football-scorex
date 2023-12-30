@@ -12,16 +12,17 @@ export class FootballdataService {
   standingsData$ : Subject<any> = new Subject<any>();
   countryName: string = '';
   countryLeagueId: string = '';
-  private cachedData: any[] = [];
+  private cachedData: string[] = [];
   private readonly CACHE_KEY = 'cached_data';
   constructor(private http: HttpClient) {
     const cached = localStorage.getItem(this.CACHE_KEY);
     if (cached) {
       this.cachedData = JSON.parse(cached);
+
     }
    }
 
-  getFootballCountryData(leagueId: any): Observable<any> {
+  getFootballCountryData(leagueId: string): Observable<any> {
     const headers = new HttpHeaders({
       'x-rapidapi-host': 'v3.football.api-sports.io',
       'x-rapidapi-key': this.apiKey
@@ -42,7 +43,7 @@ export class FootballdataService {
     // }
   }
 
-  getFixtures(leagueId: any): Observable<any>  {
+  getFixtures(leagueId: string): Observable<any>  {
     const headers = new HttpHeaders({
       'x-rapidapi-host': 'v3.football.api-sports.io',
       'x-rapidapi-key': this.apiKey
@@ -56,7 +57,7 @@ export class FootballdataService {
   restoreCachedData() {
  const cachedDataString = localStorage.getItem(this.CACHE_KEY);
  if (cachedDataString) {
-   const cachedData: any[] = JSON.parse(cachedDataString);
+   const cachedData: string[] = JSON.parse(cachedDataString);
   this.standingsData$.next(cachedData);
   }
 }

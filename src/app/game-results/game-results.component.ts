@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FootballdataService } from '../footballdata.service';
+import { Subscription } from 'rxjs';
+import { ApiResponse } from '../models/FixtureDataInteface';
 
 @Component({
   selector: 'app-game-results',
@@ -8,19 +10,23 @@ import { FootballdataService } from '../footballdata.service';
   styleUrls: ['./game-results.component.css']
 })
 export class GameResultsComponent implements OnInit{
-fixtureData: any;
-  fixturesDataSubscription: any;
+fixtureData: ApiResponse ;
+  fixturesDataSubscription: Subscription;;
   constructor(
     private router: Router,
     private activatedRoute: ActivatedRoute,
     private footballApiService: FootballdataService,
-  ) {}
+  ) {
+    this.fixturesDataSubscription = new Subscription();
+    this.fixtureData = {};
+  }
 
   ngOnInit() {
     this.fixturesDataSubscription = this.footballApiService.getFixtures(this.footballApiService.countryLeagueId).subscribe(
       {
-        next: (data: any) => {
+        next: (data: ApiResponse) => {
          this.fixtureData = data;
+         console.log("fixtureData = ",data)
         },
         error: (err) => {
           console.error('Error fetching football data:', err);
@@ -40,5 +46,9 @@ fixtureData: any;
     this.footballApiService.restoreCachedData();
     this.router.navigate(['/countryStandings', this.footballApiService.countryName]);
   }
+
+}
+
+interface GameFixture {
 
 }

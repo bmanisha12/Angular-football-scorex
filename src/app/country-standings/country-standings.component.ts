@@ -2,6 +2,8 @@ import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FootballdataService } from '../footballdata.service';
 import { Observable } from 'rxjs';
+import { CountryLeague } from '../models/CountryLeagueInterface';
+import { TeamStanding } from '../models/TeamStandings';
 
 @Component({
   selector: 'app-country-standings',
@@ -10,13 +12,13 @@ import { Observable } from 'rxjs';
 })
 export class CountryStandingsComponent implements OnInit {
 
-  tableHeaders: any[] = ['Sr.No', 'Symbol', 'Name', 'Games', 'W', 'L', 'D', 'Goal Difference', 'Points']; // Add headers for your table
+  tableHeaders: string[] = ['Sr.No', 'Symbol', 'Name', 'Games', 'W', 'L', 'D', 'Goal Difference', 'Points']; // Add headers for your table
 
-  standingsData: any;
+  standingsData: TeamStanding[];
 
-  clickCounter = 0;
+  clickCounter:number = 0;
 
-  countryList: any = [
+  countryList: CountryLeague[] = [
     { countryName: 'England', leagueName: 'Premier League', leagueId: '39' },
     { countryName: 'Spain', leagueName: 'La Liga', leagueId: '140' },
     { countryName: 'France', leagueName: 'Ligue 1', leagueId: '61' },
@@ -26,17 +28,19 @@ export class CountryStandingsComponent implements OnInit {
   
   constructor(private router: Router, private footballApiService: FootballdataService,
     private activatedRoute: ActivatedRoute, private cdr: ChangeDetectorRef) {
+   this.standingsData = []
   }
 
   ngOnInit() {
-    this.footballApiService.standingsData$.subscribe((data: any) => {
+    this.footballApiService.standingsData$.subscribe((data: TeamStanding[]) => {
       this.standingsData = data;
+      // console.log("this.standingsData = ", this.standingsData)
       this.cdr.detectChanges();
     });
   }
 
-  selectTeam(event: any, team: any) {
-    const countryName = this.activatedRoute.snapshot.params['countryName'];
+  selectTeam(event: Event, team: TeamStanding) {
+     const countryName = this.activatedRoute.snapshot.params['countryName'];
     this.router.navigate(['game-results', team.team.name]);
     if (this.clickCounter > 1) {
       this.footballApiService.clearCachedData();
